@@ -39,6 +39,12 @@ app.get('/dump', function (req, res) {
   res.send(memorystore.dumpJSON());
 });
 app.all('/oauth/token', app.oauth.grant());
+app.get('/verify', app.oauth.authorise(), function (req, res) {
+  res.send({
+    data: 'ok'
+  });
+});
+
 app.get('/test', function (req, res) {
   res.send('No secret area: test');
 });

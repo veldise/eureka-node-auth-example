@@ -1,0 +1,14 @@
+{
+    "server": {
+        "port": 3333,
+        "ssl": {
+            "port": 3300,
+            "key": "private.pem",
+            "cert": "public.pem",
+            "passphrase": ""
+        }
+    },
+    "application": {
+        "name": "auth-service"
+    }
+}
