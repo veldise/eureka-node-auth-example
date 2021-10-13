@@ -1,5 +1,5 @@
 /**
- *
+ * module dependencies
  */
 const path = require('path');
 const express = require('express');
@@ -11,15 +11,11 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
+/**
+ * express
+ */
 const app = express();
-var memorystore = require('./model');
-
-app.oauth = oauthserver({
-  model: memorystore,
-  grants: ['password','refresh_token'],
-  debug: true
-});
+const memorystore = require('./model');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,6 +26,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+/**
+ * OAuth
+ */
+app.oauth = oauthserver({
+  model: memorystore,
+  grants: ['password','refresh_token'],
+  debug: true
+});
 
 app.get('/dump', function (req, res) {
   res.send(memorystore.dumpJSON());
@@ -42,10 +46,14 @@ app.get('/test2', app.oauth.authorise(), function (req, res) {
   res.send('Secret area: test2');
 });
 app.use(app.oauth.errorHandler());
-
+/**
+ * router
+ */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+/**
+ * error handler
+ */
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
