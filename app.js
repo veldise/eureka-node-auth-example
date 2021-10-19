@@ -9,6 +9,9 @@ const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+const config = require('./config.json');
+const CONTEXT_PATH = config.application['context-path'] || '/';
+
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 /**
@@ -35,28 +38,28 @@ app.oauth = oauthserver({
   debug: true
 });
 
-app.get('/dump', function (req, res) {
+app.get(`${CONTEXT_PATH}/dump`, function (req, res) {
   res.send(memorystore.dumpJSON());
 });
-app.all('/oauth/token', app.oauth.grant());
-app.get('/verify', app.oauth.authorise(), function (req, res) {
+app.all(`${CONTEXT_PATH}/oauth/token`, app.oauth.grant());
+app.get(`${CONTEXT_PATH}/verify`, app.oauth.authorise(), function (req, res) {
   res.send({
     data: 'ok'
   });
 });
 
-app.get('/test', function (req, res) {
+app.get(`${CONTEXT_PATH}/test`, function (req, res) {
   res.send('No secret area: test');
 });
-app.get('/test2', app.oauth.authorise(), function (req, res) {
+app.get(`${CONTEXT_PATH}/test2`, app.oauth.authorise(), function (req, res) {
   res.send('Secret area: test2');
 });
 app.use(app.oauth.errorHandler());
 /**
  * router
  */
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(`${CONTEXT_PATH}/`, indexRouter);
+app.use(`${CONTEXT_PATH}/users`, usersRouter);
 /**
  * error handler
  */

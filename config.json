@@ -12,7 +12,8 @@
     },
     "application": {
         "name": "auth-service",
-        "host": null
+        "host": null,
+        "context-path": "/ms-auth"
     },
     "eureka": {
         "host": null,
